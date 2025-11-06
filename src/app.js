@@ -31,5 +31,5 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 
 app.listen(PORT, () => {
-  console.log(`Servidor escuchando en el puerto ${PORT}`);
+  console.log(`Servidor iniciado en el puerto ${PORT}`);
 });
