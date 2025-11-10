@@ -1,7 +1,7 @@
 import passport from "passport";
 import local from 'passport-local';
 import jwt from 'passport-jwt';
-import User from "../models/user.model.js";
+import User from "../models/users.model.js";
 import { hashPassword, validatePassword } from "../utils/hash.js";
 
 const initPassport = () => {

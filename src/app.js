@@ -2,8 +2,6 @@ import express from 'express';
 import { engine } from 'express-handlebars';
 import dotenv from 'dotenv';
 import passport from 'passport';
-import session from 'express-session';
-import MongoStore from 'connect-mongo';
 
 import connectMongoDb from './config/db.js';
 import initPassport from './config/passport.config.js';
