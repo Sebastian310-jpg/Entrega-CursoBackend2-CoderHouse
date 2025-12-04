@@ -10,7 +10,6 @@ class TicketService {
     this.productService = new ProductService();
   }
 
-  // Generar ticket y actualizar stock
   purchase = async (cartId, user) => {
     const cart = await this.cartService.getCartById(cartId);
     if (!cart || cart.products.length === 0) {
@@ -19,24 +18,29 @@ class TicketService {
 
     let totalAmount = 0;
     const purchasedProducts = [];
+    const remainingProducts = [];
 
     for (let item of cart.products){
       const product = await this.productService.getProductById(item.product);
 
-      if (product.stock < item.quantity){
-        throw new Error(`No hay suficiente stock para el producto: ${product.name}`);
+      if (product.stock >= item.quantity){
+        purchasedProducts.push({
+          product: product._id,
+          quantity: item.quantity,
+          price: product.price
+        });
+
+        totalAmount += product.price * item.quantity;
+        
+        // Actualizar stock
+        await this.productService.updateProduct(product._id, { stock: product.stock - item.quantity });
+      } else {
+        remainingProducts.push(item);
       }
+    }
 
-      // Actualizar stock
-      await this.productService.updateProduct(product._id, { stock: product.stock - item.quantity });
-
-      purchasedProducts.push({
-        product: product._id,
-        quantity: item.quantity,
-        price: product.price
-      });
-
-      totalAmount += product.price * item.quantity;
+    if(purchasedProducts.length === 0){
+      throw new Error('No hay productos disponibles para la compra');
     }
 
     // Crear el ticket
@@ -49,8 +53,7 @@ class TicketService {
 
     const ticket = await this.ticketRepository.createTicket(ticketData);
 
-    // Vaciar el carrito
-    await this.cartService.clearCart(cartId);
+    await this.cartService.updateCart(cartId, remainingProducts);
 
     return ticket;
   }

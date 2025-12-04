@@ -13,8 +13,8 @@ class CartRepository {
     return await this.cartDao.getCartById(cartId);
   }
 
-  updateCart = async (cartId, cartData) => {
-    return await this.cartDao.updateCart(cartId, cartData);
+  updateCart = async (cartId, newProducts) => {
+    return await this.cartDao.updateCart(cartId, newProducts);
   }
 
   deleteCart = async (cartId) => {

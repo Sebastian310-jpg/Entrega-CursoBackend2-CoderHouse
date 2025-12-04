@@ -52,6 +52,13 @@ class CartService {
     return await this.cartRepository.updateCart(cartId, { products: [] });
   }
 
+  async updateCart(cartId, newProducts){
+    const cart = await this.cartRepository.getCartById(cartId);
+    if(!cart) throw new Error('Carrito no encontrado');
+    
+    return await this.cartRepository.updateCart(cartId, newProducts);
+  }
+
   async updateQuantityOfProductInCart(cartId, productId, newQuantity){
     const cart = await this.cartRepository.getCartById(cartId);
     if(!cart) throw new Error('Carrito no encontrado');
@@ -67,6 +74,8 @@ class CartService {
 
     return await this.cartRepository.updateCart(cartId, { products: cart.products });
   }
+
+  
 }
 
 export default CartService;
