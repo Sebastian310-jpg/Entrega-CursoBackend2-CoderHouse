@@ -1,6 +1,7 @@
+import './config/env.js'; // Cargar variables de entorno
+
 import express from 'express';
 import { engine } from 'express-handlebars';
-import dotenv from 'dotenv';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 
@@ -12,9 +13,7 @@ import productRouter from './routes/products.router.js';
 import cartRouter from './routes/carts.router.js';
 import sessionsRouter from './routes/sessions.router.js';
 import userRouter from './routes/users.router.js';
-
-// Inicializar variables de entorno
-dotenv.config();
+import ticketRouter from './routes/tickets.router.js';
 
 const app = express();
 const PORT = process.env.PORT;
@@ -39,6 +38,7 @@ app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/api/users", userRouter);
+app.use("/api/tickets", ticketRouter);
 
 // Conectar con MongoDB
 connectMongoDb();

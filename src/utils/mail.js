@@ -5,8 +5,8 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false,
   auth: {
-    user: 'sebastianstahler04@gmail.com',
-    pass: 'bfgh nanz pmrx hmhr'
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD
   },
   tls: {
     rejectUnauthorized: false
@@ -22,8 +22,6 @@ const sendEmail = async ({ to, subject, html }) => {
       html,
     })
 
-    console.log(info);
-
     console.log('Email enviado: ' + info.messageId);
     return info;
     
@@ -32,6 +30,5 @@ const sendEmail = async ({ to, subject, html }) => {
     throw error;
   }
 }
-
 
 export default sendEmail;

@@ -11,18 +11,18 @@ class CartService {
 
   async getCartById(cartId){
     const cart = await this.cartRepository.getCartById(cartId);
-
     if(!cart) throw new Error('Carrito no encontrado');
-
     return cart;
   }
 
   async addProductToCart(cartId, productId, quantity = 1){
     const cart = await this.cartRepository.getCartById(cartId);
-
     if(!cart) throw new Error('Carrito no encontrado');
 
-    const productIndex = cart.products.findIndex(p => p.product._id.toString() === productId);
+    const productIndex = cart.products.findIndex(p => {
+      const id = p.product._id ? p.product._id.toString() : p.product.toString();
+      return id === productId;
+    });
 
     if(productIndex > -1){
       cart.products[productIndex].quantity += quantity;
@@ -35,29 +35,32 @@ class CartService {
 
   async removeProductFromCart(cartId, productId){
     const cart = await this.cartRepository.getCartById(cartId);
-
     if(!cart) throw new Error('Carrito no encontrado');
 
-    cart.products = cart.products.filter(p => p.product._id.toString() !== productId);
+    cart.products = cart.products.filter(p => {
+      const id = p.product._id ? p.product._id.toString() : p.product.toString();
+      return id !== productId;
+    });
 
     return await this.cartRepository.updateCart(cartId, { products: cart.products });
   }
 
   async clearCart(cartId){
     const cart = await this.cartRepository.getCartById(cartId);
-
     if(!cart) throw new Error('Carrito no encontrado');
 
-    cart.products = [];
-
-    return await this.cartRepository.updateCart(cartId, { products: cart.products });
+    return await this.cartRepository.updateCart(cartId, { products: [] });
   }
 
   async updateQuantityOfProductInCart(cartId, productId, newQuantity){
     const cart = await this.cartRepository.getCartById(cartId);
     if(!cart) throw new Error('Carrito no encontrado');
 
-    const productInCart = cart.products.find(p => p.product._id.toString() === productId);
+    const productInCart = cart.products.find(p => {
+      const id = p.product._id ? p.product._id.toString() : p.product.toString();
+      return id === productId;
+    });
+
     if(!productInCart) throw new Error('Producto no encontrado en el carrito');
 
     productInCart.quantity = newQuantity;

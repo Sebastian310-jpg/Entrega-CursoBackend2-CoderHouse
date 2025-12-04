@@ -1,5 +1,8 @@
 const authorization = (roles = []) => {
   return (req, res, next) => {
+    console.log('req.user:', req.user);
+    console.log('roles permitidos:', roles);
+
     if(!req.user){
       return res.status(401).json({ status: 'error', message: 'Usuario no autenticado' });
     }

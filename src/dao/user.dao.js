@@ -22,10 +22,7 @@ class UserDAO {
   }
 
   async getUserByResetToken(token){
-    return await User.findOne({
-      resetPasswordToken: token,
-      resetPasswordExpires: { $gt: Date.now() },
-    });
+    return await User.findOne({ resetPasswordToken: token });
   }
 }
 
