@@ -1,7 +1,7 @@
-import express from 'express';
-import Product from '../models/products.model.js';
+import { Router } from 'express';
+import Product from '../dao/models/products.model.js';
 
-const viewsRouter = express.Router();
+const viewsRouter = Router();
 
 viewsRouter.get("/", async (req, res) => {
   try {
@@ -44,6 +44,16 @@ viewsRouter.get("/products/:pid", async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: "error", message: "Error al obtener los productos: " + error.message });
   }
+})
+
+viewsRouter.get("/forgot-password", (req, res) => {
+  res.render("forgotPassword");
+})
+
+viewsRouter.get("/reset-password", (req, res) => {
+  const { token } = req.query;
+
+  res.render("resetPassword", { token });
 })
 
 export default viewsRouter;

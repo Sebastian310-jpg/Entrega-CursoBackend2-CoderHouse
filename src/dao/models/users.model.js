@@ -9,6 +9,9 @@ const userSchema = new mongoose.Schema(
     password: { type: String },
     cart: { type: mongoose.Schema.Types.ObjectId, ref: 'Carts' },
     role: { type: String, default: 'user' },
+
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date },
   },
   {
     timestamps: true,

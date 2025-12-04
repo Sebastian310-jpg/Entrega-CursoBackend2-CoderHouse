@@ -1,7 +1,7 @@
 import passport from "passport";
 import local from 'passport-local';
 import jwt from 'passport-jwt';
-import User from "../models/users.model.js";
+import User from "../dao/models/users.model.js";
 import { hashPassword, validatePassword } from "../utils/hash.js";
 
 const initPassport = () => {
@@ -52,7 +52,7 @@ const initPassport = () => {
 
   passport.use('current', new jwt.Strategy(
     {
-      jwtFromRequest: jwt.ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: jwt.ExtractJwt.fromExtractors([ (req) => req?.cookies?.authToken ]),
       secretOrKey: process.env.JWT_SECRET,
     },
     async (payload, done) => {
